@@ -5,13 +5,14 @@
  *
  *    Description:  My little collection of useful functions I've made for myself
  *
- *        Version:  1.0
+ *        Version:  0.1
  *        Created:  03/03/14 11:18:52
  *       Revision:  none
- *       Compiler:  gcc
+ *       Compiler:  Clang
+ *        License:  BSD 3-Clause License
+ *                  see attached file ./LICENSE
  *
  *         Author:  Matthew Pherigo (mwp), hybrid120@gmail.com
- *   Organization:  
  *
  * =====================================================================================
  */
