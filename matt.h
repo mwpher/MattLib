@@ -17,4 +17,34 @@
  * =====================================================================================
  */
 
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  stringtoint
+ *  Description:  Converts a string to a long long using strtonum, then to an int.
+ *                Sets errno to a non-zero value if the number cannot fit in an 
+ *                int value.
+ * =====================================================================================
+ */
 int stringtoint(char* string);
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  getChar
+ *  Description:  Gets a char from the user. Mostly CS50 code, see cs50.h
+ * =====================================================================================
+ */
+char getChar(void);
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  getString
+ *  Description:  Gets a string from the user, with an optional limit. To not use the
+ *                limit, just pass getString a limit of (0).
+ *
+ *                CS50 code with the added ability to declare a limit on the length
+ *                of the string.
+ * =====================================================================================
+ */
+char* getString(unsigned int limit);
+
