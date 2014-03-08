@@ -30,14 +30,6 @@ int stringtoint(char* string);
 
 /*
  * ===  FUNCTION  ======================================================================
- *         Name:  getChar
- *  Description:  Gets a char from the user. Mostly CS50 code, see cs50.h
- * =====================================================================================
- */
-char getChar(void);
-
-/*
- * ===  FUNCTION  ======================================================================
  *         Name:  getString
  *  Description:  Gets a string from the user, with an optional limit. To not use the
  *                limit, just pass getString a limit of (0).
@@ -47,4 +39,21 @@ char getChar(void);
  * =====================================================================================
  */
 char* getString(unsigned int limit);
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  getChar
+ *  Description:  Gets a char from the user. Mostly CS50 code, see cs50.h
+ * =====================================================================================
+ */
+char getChar(void);
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  stringtod
+ *  Description:  Convert string to double float.
+ * =====================================================================================
+ */
+double stringtod(char* string);
+
 

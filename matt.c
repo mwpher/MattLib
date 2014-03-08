@@ -1,4 +1,4 @@
-/*
+/* 
  * =====================================================================================
  *
  *       Filename:  matt.c
@@ -13,7 +13,7 @@
  *                  see attached file ./LICENSE
  *
  *         Author:  Matthew Pherigo (mwp), hybrid120@gmail.com
- *
+ * 
  * =====================================================================================
  */
 
@@ -23,13 +23,23 @@
 #include <errno.h>
 #include <limits.h>
 #include <string.h>
+#include <math.h>
 
 #include "matt.h"
 
 // Define true and false
 #define	TRUE 1			
-// #define	FALSE 0			
+// #define	FALSE 0
 
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  stringtoint
+ *  Description:  Converts a string to a long long using strtonum, then to an int.
+ *                Sets errno to a non-zero value if the number cannot fit in an 
+ *                int value.
+ * =====================================================================================
+ */
 int stringtoint(char* string)
 {
     const char* err;
@@ -60,8 +70,18 @@ int stringtoint(char* string)
     answer = (int)ll;
     errno = 0;
     return answer;
-}
+} 
 
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  getString
+ *  Description:  Gets a string from the user, with an optional limit. To not use the
+ *                limit, just pass getString a limit of (0).
+ *
+ *                CS50 code with the added ability to declare a limit on the length
+ *                of the string.
+ * =====================================================================================
+ */
 char* getString(unsigned int limit)
 {
     // growable buffer for chars
@@ -167,6 +187,12 @@ char* getString(unsigned int limit)
     return minimal;
 }
 
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  getChar
+ *  Description:  Gets a char from the user. Mostly CS50 code, see cs50.h
+ * =====================================================================================
+ */
 char getChar(void)
 {
     while ( TRUE )
@@ -189,4 +215,31 @@ char getChar(void)
         }
     }
 }
+
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  stringtod
+ *  Description:  Convert string to double float.
+ * =====================================================================================
+ */
+double stringtod(char* string)
+{
+    double result;
+    result = strtod(str, NULL);
+
+    if (ERANGE == errno)
+    {
+        if (HUGE_VAL == result)
+        {
+            result = INFINITY;
+        }
+        else if (-HUGE_VAL == result)
+        {
+            result = -INFINITY;
+        }
+    }
+    return result;
+}
+
 
