@@ -1,0 +1,23 @@
+IDIR =./
+CC=clang
+CFLAGS='-I$(IDIR) -fpic -Weverything -Wno-unused-parameter -std=c99 -ggdb3 -O0 -v'
+
+ODIR=obj
+
+_DEPS = matt.h
+DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
+
+_OBJ = matt.o
+OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
+
+
+$(ODIR)/%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+libmatt.so: $(OBJ)
+	$(CC) -shared -o $@ $^
+
+.PHONY: clean
+
+clean:
+	rm -f $(ODIR)/*.o core 

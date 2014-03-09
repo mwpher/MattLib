@@ -16,7 +16,7 @@
  *
  * =====================================================================================
  */
-
+#include <stdbool.h>
 
 /*
  * ===  FUNCTION  ======================================================================
@@ -56,4 +56,11 @@ char getChar(void);
  */
 double stringtod(char* string);
 
-
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  dEquality
+ *  Description:  Tests if two doubles are close enough to each other to consider
+ *                "equal". "Close enough" is defined by the value of epsilon.
+ * =====================================================================================
+ */
+bool dEquality(double a, double b, double epsilon);

@@ -20,6 +20,7 @@
 // Header files
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <errno.h>
 #include <limits.h>
 #include <string.h>
@@ -37,7 +38,7 @@
  *         Name:  stringtoint
  *  Description:  Converts a string to a long long using strtonum, then to an int.
  *                Sets errno to a non-zero value if the number cannot fit in an 
- *                int value.
+ *                int value; 1 for a positive overflow, -1 for negative.
  * =====================================================================================
  */
 int stringtoint(char* string)
@@ -190,7 +191,7 @@ char* getString(unsigned int limit)
 /*
  * ===  FUNCTION  ======================================================================
  *         Name:  getChar
- *  Description:  Gets a char from the user. Mostly CS50 code, see cs50.h
+ *  Description:  Gets a char from the user. CS50 code.
  * =====================================================================================
  */
 char getChar(void)
@@ -226,20 +227,32 @@ char getChar(void)
 double stringtod(char* string)
 {
     double result;
-    result = strtod(str, NULL);
+    result = strtod(string, NULL);
 
     if (ERANGE == errno)
     {
-        if (HUGE_VAL == result)
+        if (HUGE_VAL >= result)
         {
             result = INFINITY;
         }
-        else if (-HUGE_VAL == result)
+        else if (-HUGE_VAL <= result)
         {
             result = -INFINITY;
         }
     }
+
+    errno = ERANGE;
     return result;
 }
 
-
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  dEquality
+ *  Description:  Tests if two doubles are close enough to each other to consider
+ *                "equal". "Close enough" is defined by the value of epsilon.
+ * =====================================================================================
+ */
+bool dEquality(double a, double b, double epsilon)
+{
+    return fabs(a - b) < epsilon;
+}
