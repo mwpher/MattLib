@@ -25,13 +25,16 @@
 #include <limits.h>
 #include <string.h>
 #include <math.h>
-
+#include <unistd.h>
 #include "matt.h"
 
 // Define true and false
-#define	TRUE 1			
+// #define	TRUE 1			
 // #define	FALSE 0
-
+// 
+// define some error shortcuts
+// when we know what went wrong:
+#define ERROR fprintf(stderr, "%s", strerror(errno));
 
 /*
  * ===  FUNCTION  ======================================================================
@@ -46,6 +49,7 @@ int stringtoint(char* string)
     const char* err;
     long long ll;
     int answer;
+    errno = 0;
 
     ll = strtonum(string, LLONG_MIN, LLONG_MAX, &err);
     if (err != NULL)
@@ -98,9 +102,10 @@ char* getString(unsigned int limit)
     int c;
 
     // limit precheck
-    if (limit > 0 && limit < 32)
+    if (limit > UINT_MAX)
     {
-        fprintf(stderr, "getString: Limit %i less than minimum value (32). For no limit, pass the function a limit of (0).", limit);
+        fprintf(stderr, "getString: Limit %i outside UINT boundaries? For no limit, pass the function a limit of (0).", limit);
+        return NULL;
     }
 
     // iteratively get chars from standard input
@@ -123,8 +128,16 @@ char* getString(unsigned int limit)
                 {
                     if (capacity == limit)
                     {
-                        fprintf(stderr, "Character limit of %i reached. Returning what we have.", limit);
-                        break;
+                        fprintf(stderr, "\nCharacter limit of %i reached. About to retry...\n", limit);
+                        sleep(1);
+                        printf ( "3...\n" );
+                        sleep(1);
+                        printf ( "2...\n" );
+                        sleep(1);
+                        printf ( "1...\n" );
+                        sleep(1);
+                        printf ( "Retry: " );
+                        continue;
                     }
                     capacity = limit;
                 }
@@ -196,7 +209,7 @@ char* getString(unsigned int limit)
  */
 char getChar(void)
 {
-    while ( TRUE )
+    while ( true )
     {
         char c1, c2;
         char* line = getString(0);
@@ -207,7 +220,7 @@ char getChar(void)
         if (1 == sscanf(line, " %c %c", &c1, &c2))
         {
             free(line);
-            return c1; /*  i can be safely used */
+            return c1;
         }
         else
         {
@@ -217,7 +230,42 @@ char getChar(void)
     }
 }
 
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  getDouble
+ *  Description:  Get a double from the user. Returns NULL and errno=1 upon failure.
+ * =====================================================================================
+ */
+double getDouble(void)
+{
+    // try to get a double from user
+    while (true)
+    {
+        // get line of text, returning CHAR_MAX & errno on failure
+        char* line = getString(0);
+        if (line == NULL)
+        {
+            errno = 1;
+            return CHAR_MAX;
+        }
 
+        // return a double if only a double (possibly with
+        // leading and/or trailing whitespace) was provided
+        char* extract; double d; char c;
+        extract = malloc(sizeof(double));
+        if (sscanf(line, " %s %c", extract, &c) == 1)
+        {
+            d = stringtod(extract);
+            free(line);
+            return d;
+        }
+        else
+        {
+            free(line);
+            printf("Retry: ");
+        }
+    }
+}
 /*
  * ===  FUNCTION  ======================================================================
  *         Name:  stringtod
@@ -226,22 +274,34 @@ char getChar(void)
  */
 double stringtod(char* string)
 {
-    double result;
-    result = strtod(string, NULL);
-
-    if (ERANGE == errno)
+    errno = 0;
+    double result = strtod(string, NULL);
+    if (errno != 0)
     {
-        if (HUGE_VAL >= result)
+        if (ERANGE == errno)
         {
-            result = INFINITY;
+            if (HUGE_VAL >= result)
+            {
+                result = INFINITY;
+                ERROR;
+            }
+            else if (-HUGE_VAL <= result)
+            {
+                result = -INFINITY;
+                ERROR;
+            }
+            else
+                ERROR;
         }
-        else if (-HUGE_VAL <= result)
+        else if (errno == EINVAL)
         {
-            result = -INFINITY;
+            result = NAN;
+            ERROR;
         }
+        else
+            ERROR;
     }
-
-    errno = ERANGE;
+    
     return result;
 }
 

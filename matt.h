@@ -50,6 +50,14 @@ char getChar(void);
 
 /*
  * ===  FUNCTION  ======================================================================
+ *         Name:  getDouble
+ *  Description:  Get a double from the user. Returns NULL and errno=1 upon failure.
+ * =====================================================================================
+ */
+double getDouble(void);
+
+/*
+ * ===  FUNCTION  ======================================================================
  *         Name:  stringtod
  *  Description:  Convert string to double float.
  * =====================================================================================
