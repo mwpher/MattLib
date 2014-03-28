@@ -54,7 +54,7 @@ int stringtoint(char* string)
     ll = strtonum(string, LLONG_MIN, LLONG_MAX, &err);
     if (err != NULL)
     {
-        errno = 1;
+        errno = -2;
         fprintf(stderr, "strtonum error: %s\n", err);
         return 0;
     }
