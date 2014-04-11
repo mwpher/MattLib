@@ -9,8 +9,14 @@ OBJS=matt.o
 TARG=libmatt.so
 
 CC=clang
-CFLAGS=-I./ -fpic -Weverything -Wno-unused-parameter -std=c99 -ggdb3 -O0 -v
-LDFLAGS=-s
+.if make(release)
+CFLAGS=-I./ -fpic -Weverything -Wno-unused-parameter -std=c99 -O0 #-D_FORTIFY_SOURCE=2 -fstack-protector-all
+.else
+CFLAGS=-I./ -fpic -Weverything -Wno-unused-parameter -std=c99 -ggdb3 -O0 -fstack-protector-all -D_FORTIFY_SOURCE=2
+.endif
+LDFLAGS=#-fpic -v #-s
+# -Wl,-z,now -Wl,-z,relro 
+release: all
 
 install: all
 	sudo cp -f ./libmatt.so ${LIBDIR}
@@ -18,11 +24,10 @@ install: all
 	sudo cp -f ./matt.h ${INCDIR}
 	sudo chmod 755 ${INCDIR}/matt.h
 
-
 all: ${TARG}
  
 ${TARG}: ${OBJS}
-		$(CC) -shared -fpic -o ${.TARGET} ${.ALLSRC}
+		$(CC) ${LDFLAGS} -o ${.TARGET} ${.ALLSRC}
 
 ${OBJS}: ${SRC}
 		$(CC) ${.ALLSRC} $(CFLAGS) -c -o ${.TARGET}
