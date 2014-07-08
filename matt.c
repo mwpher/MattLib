@@ -28,10 +28,10 @@
 #include <unistd.h>
 #include "matt.h"
 
-// Define true and false
+//// Define true and false
 // #define	TRUE 1			
 // #define	FALSE 0
-// 
+
 // define some error shortcuts
 // when we know what went wrong:
 #define ERROR fprintf(stderr, "%s", strerror(errno));
