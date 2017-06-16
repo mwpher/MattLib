@@ -33,6 +33,26 @@ int stringtoint(char* string);
 
 /*
  * ===  FUNCTION  ======================================================================
+ *         Name:  stringtoshort
+ *  Description:  Converts a string to a long long using strtonum, then to a short.
+ *                Sets errno to a non-zero value if the number cannot fit in a 
+ *                short value; 1 for a positive overflow, -1 for negative.
+ * =====================================================================================
+ */
+short stringtoshort(char* string);
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  stringtochar
+ *  Description:  Converts a string to a long long using strtonum, then to a char.
+ *                Sets errno to a non-zero value if the number cannot fit in a 
+ *                char value; 1 for a positive overflow, -1 for negative.
+ * =====================================================================================
+ */
+char stringtochar(char* string);
+
+/*
+ * ===  FUNCTION  ======================================================================
  *         Name:  getString
  *  Description:  Gets a string from the user, with an optional limit. To not use the
  *                limit, just pass getString a limit of (0).
@@ -75,3 +95,6 @@ double stringtod(char* string);
  * =====================================================================================
  */
 bool dEquality(double a, double b, double epsilon);
+
+/*  Quit  */
+void quit(const char message[]);

@@ -79,6 +79,88 @@ int stringtoint(char* string)
 
 /*
  * ===  FUNCTION  ======================================================================
+ *         Name:  stringtoshort
+ *  Description:  Converts a string to a long long using strtonum, then to a short.
+ *                Sets errno to a non-zero value if the number cannot fit in a 
+ *                short value; 1 for a positive overflow, -1 for negative.
+ * =====================================================================================
+ */
+short stringtoshort(char* string)
+{
+    const char* err;
+    long long ll;
+    short answer;
+    errno = 0;
+
+    ll = strtonum(string, LLONG_MIN, LLONG_MAX, &err);
+    if (err != NULL)
+    {
+        errno = -2;
+        fprintf(stderr, "strtonum error: %s\n", err);
+        return 0;
+    }
+
+    if (ll > SHRT_MAX)
+    {
+        errno = 1;
+        fprintf(stderr, "stringtoint: number too big for int! (Number was %lld)\n", ll);
+        return 0;
+    }
+    else if (ll < SHRT_MIN)
+    {
+        errno = -1;
+        fprintf(stderr, "stringtoint: number too big for int! (Number was %lld)\n", ll);
+        return 0;
+    }
+
+    answer = (short)ll;
+    errno = 0;
+    return answer;
+} 
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  stringtochar
+ *  Description:  Converts a string to a long long using strtonum, then to a char.
+ *                Sets errno to a non-zero value if the number cannot fit in a 
+ *                char value; 1 for a positive overflow, -1 for negative.
+ * =====================================================================================
+ */
+char stringtochar(char* string)
+{
+    const char* err;
+    long long ll;
+    char answer;
+    errno = 0;
+
+    ll = strtonum(string, LLONG_MIN, LLONG_MAX, &err);
+    if (err != NULL)
+    {
+        errno = -2;
+        fprintf(stderr, "strtonum error: %s\n", err);
+        return 0;
+    }
+
+    if (ll > CHAR_MAX)
+    {
+        errno = 1;
+        fprintf(stderr, "stringtochar: number too big for char! (Number was %lld)\n", ll);
+        return 0;
+    }
+    else if (ll < CHAR_MIN)
+    {
+        errno = -1;
+        fprintf(stderr, "stringtochar: number too big for char! (Number was %lld)\n", ll);
+        return 0;
+    }
+
+    answer = (char)ll;
+    errno = 0;
+    return answer;
+} 
+
+/*
+ * ===  FUNCTION  ======================================================================
  *         Name:  getString
  *  Description:  Gets a string from the user, with an optional limit. To not use the
  *                limit, just pass getString a limit of (0).
@@ -315,4 +397,11 @@ double stringtod(char* string)
 bool dEquality(double a, double b, double epsilon)
 {
     return fabs(a - b) < epsilon;
+}
+
+/*  Quit  */
+void quit(const char message[])
+{
+    fprintf(stderr, "%s", message);
+    exit(1);
 }
